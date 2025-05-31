@@ -18,7 +18,7 @@ class SentimentDataModule:
                 self.dataset = datasets.load_dataset(self.params["dataset_name"])
                 self.dataset.save_to_disk(self.params["raw_data_path"])
         elif self.params["platform"] == "cuda":
-            self.dataset = datasets.load_dataset(self.params["tokenizer"]["name"])
+            self.dataset = datasets.load_dataset(self.params["dataset_name"])
 
         self.dataset = self.dataset.remove_columns("title")
         # Skipping data prep as it is not part of the judging criteria
