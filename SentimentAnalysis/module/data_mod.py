@@ -11,7 +11,7 @@ class SentimentDataModule:
 # %%
     def fetch_dataset(self):
         print("fetch_dataset()")
-        print{f"{self.params['platform']=}|{self.params['dataset_name']}"}
+        print(f"{self.params['platform']=}|{self.params['dataset_name']}")
         if self.params["platform"] == "cpu":
             if os.path.isdir(self.params["raw_data_path"]):
                 self.dataset = datasets.load_from_disk(self.params["raw_data_path"])
