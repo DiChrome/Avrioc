@@ -18,6 +18,7 @@ class Util:
         params["arch_bit"] = struct.calcsize("P") * 8
         params["device"] = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         params["platform"] = "cuda" if torch.cuda.is_available() else "cpu"
+        print(f"{params["platform"]=}")
         return params
 
     def increment_model_index(yaml_path):
