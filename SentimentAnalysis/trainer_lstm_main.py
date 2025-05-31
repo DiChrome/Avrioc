@@ -53,7 +53,7 @@ sdm.load_encoded_dataset()
 
 
 # %%
-train_dataloader, val_dataloader = sdm.get_data_loader(percent_data = 10)
+train_dataloader, val_dataloader = sdm.get_data_loader(percent_data = data_params["percent_data"])
 model = LstmClassifier(vocab_size = sdm.tokenizer.vocab_size, dim_list = model_params["dim_list"], dropout=model_params["dropout"])
 loss_func = nn.BCEWithLogitsLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=model_params["optimizer_lr"])
