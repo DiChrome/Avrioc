@@ -9,8 +9,11 @@ import sys, os
 # %%
 # %load_ext autoreload
 # %autoreload 2
-current_dir = os.path.dirname(os.path.abspath(__file__))
-# current_dir = os.getcwd() 
+# current_dir = os.path.dirname(os.path.abspath(__file__))
+try:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+except:
+    current_dir = os.getcwd() 
 
 module_path = os.path.join(current_dir, "module")
 sys.path.append(module_path)
@@ -28,11 +31,11 @@ from utility_mod import Util
 yaml_path = os.path.join(current_dir, "params.yaml")
 util_yaml_path = os.path.join(current_dir, "../Utility/params.yaml")
 
-util_params = Util.get_params(util_yaml_path)
-data_params = Util.get_params(yaml_path)["data"]
-data_params.update(util_params)
+# util_params = Util.get_params(util_yaml_path)
+data_params = Util.get_params(yaml_path)
+data_params.update(data_params["data"])
 model_params = Util.get_params(yaml_path)["model"]
-model_params.update(util_params)
+model_params.update(data_params["model"])
 
 sdm = SentimentDataModule(data_params)
 
@@ -87,4 +90,5 @@ Util.write_yaml(output_path+"/config.yaml", model_params)
 # Implement Early Stop
 # Data EDA
 # Remove comments
+
 
