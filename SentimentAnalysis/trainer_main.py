@@ -9,18 +9,16 @@ import sys, os
 # %%
 # %load_ext autoreload
 # %autoreload 2
-
-# Module path (for module/ folder)
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 module_path = os.path.join(current_dir, "module")
+utility_path = os.path.join(current_dir, "../Utility")
 sys.path.append(module_path)
+sys.path.append(utility_path)
 
 from data_mod import SentimentDataModule
 from model_mod import LstmClassifier, TrainModel
 
-utility_path = os.path.join(current_dir, "../Utility")
-sys.path.append(utility_path)
 from utility_mod import Util
 
 # %%
