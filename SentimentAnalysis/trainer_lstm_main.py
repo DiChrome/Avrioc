@@ -9,8 +9,8 @@ import sys, os
 # %%
 # %load_ext autoreload
 # %autoreload 2
-# current_dir = os.path.dirname(os.path.abspath(__file__))
-current_dir = os.getcwd() 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+# current_dir = os.getcwd() 
 
 module_path = os.path.join(current_dir, "module")
 sys.path.append(module_path)
