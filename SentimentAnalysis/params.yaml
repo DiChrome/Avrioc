@@ -17,4 +17,4 @@ model:
   epoch: 2
   index: 1
   optimizer_lr: 0.0001
-  inference_model_path: output/model_1/model.pt
+  inference_model_path: output/model_1/

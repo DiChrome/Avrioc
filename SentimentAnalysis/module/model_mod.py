@@ -46,33 +46,6 @@ class TrainModel:
         return logit_tensor, label_tensor, loss
 
 # %%
-    def train_model_epoch(self):
-        print("train_model_epoch()")
-        total_loss = 0
-        correct_pred = 0
-        total_pred = 0
-        self.model.train()
-
-        for batch_num, batch in enumerate(self.train_dataloader):
-            print(f"\r{batch_num=}", end="")
-            self.optimizer.zero_grad()
-            logit_tensor, label_tensor, loss = self.model_iteration(batch)
-            # print(f"{loss=}|{loss.shape=}")
-            loss.backward()
-            self.optimizer.step()
-
-            total_loss+=loss.item()
-            total_pred += label_tensor.size(0)
-            pred_tensor = (torch.sigmoid(logit_tensor) > 0.5).long()
-            correct_pred += (pred_tensor == label_tensor).sum().item()
-            if batch_num >= 10:  # To do: remove
-                break
-        print("")
-        total_pred += label_tensor.size(0)
-        loss = total_loss/len(self.train_dataloader)
-        accuracy = correct_pred/total_pred
-        
-        return loss, accuracy
     
     def model_epoch(self, mode):
         print(f"model_epoch({mode=})")
@@ -94,7 +67,7 @@ class TrainModel:
 
             total_loss+=loss.item()
             total_pred += label_tensor.size(0)
-            pred_tensor = (torch.sigmoid(logit_tensor) > 0.5).long()
+            pred_tensor = (torch.sigmoid(logit_tensor) > 0.5).int()
             correct_pred += (pred_tensor == label_tensor).sum().item()
             # print(f"{loss=}|{loss.shape=}")
             
@@ -102,8 +75,8 @@ class TrainModel:
                 self.optimizer.zero_grad()
                 loss.backward()
                 self.optimizer.step()
-            if batch_num >= 10:  # To do: remove
-                break
+            # if batch_num >= 10:  # To do: remove
+            #     break
             
         total_pred += label_tensor.size(0)
         loss = total_loss/len(dataloader)
@@ -111,34 +84,6 @@ class TrainModel:
 
         print("")        
         return loss, accuracy
-
-# %%
-    def val_model_epoch(self):
-        self.model.eval()
-        total_val_loss = 0
-        correct_pred = 0
-        total_pred = 0
-        y_pred = []
-        y_true = []
-
-        with torch.no_grad():
-            for batch_num, batch in enumerate(self.val_dataloader):
-                print(f"\r{batch_num=}", end="")
-                logit_tensor, label_tensor, loss = self.model_iteration(batch)
-                
-
-                total_val_loss+=loss.item()
-                # print(f"{loss=}, {batch_loss=}")
-                pred_tensor = (torch.sigmoid(logit_tensor) > 0.5).long()
-                correct_pred += (pred_tensor == label_tensor).sum().item()
-                # if batch_num >= 10:  # To do: remove
-                #     break
-                
-        total_pred += label_tensor.size(0)
-        accuracy = correct_pred/total_pred
-
-        val_loss = total_val_loss/len(self.val_dataloader)
-        return val_loss, accuracy
 
 # %%
     def train_model(self):
@@ -177,3 +122,25 @@ class TrainModel:
         
         plt.tight_layout()
         return plt
+
+# %%
+class InferModel:
+    def __init__(self, tokenizer_params, model):
+        self.tokenizer_params = tokenizer_params
+        self.model = model
+    # %%
+    def predict(self, text):
+        # tokenizer_params["return_tensors"]
+        token_id = self.tokenizer.encode(text, padding=self.tokenizer_params["padding"],
+                                    max_length = self.tokenizer_params["max_length"],
+                                    truncation=self.tokenizer_params["truncation"])
+        input_tensor = torch.tensor(token_id).unsqueeze(0)
+        with torch.no_grad():
+            logit_tensor = self.model(input_tensor).view(-1)
+        
+        pred_tensor = (torch.sigmoid(logit_tensor) > 0.5).int()
+        pred = pred_tensor.item()
+        if pred == 1:
+            print("Analysis: Positive")
+        else:
+            print("Analysis: Negative")
