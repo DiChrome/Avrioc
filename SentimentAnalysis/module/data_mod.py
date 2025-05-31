@@ -15,7 +15,7 @@ class SentimentDataModule:
             if os.path.isdir(self.params["raw_data_path"]):
                 self.dataset = datasets.load_from_disk(self.params["raw_data_path"])
             else:
-                self.dataset = datasets.load_dataset(self.params["tokenizer"]["name"])
+                self.dataset = datasets.load_dataset(self.params["dataset_name"])
                 self.dataset.save_to_disk(self.params["raw_data_path"])
         elif self.params["platform"] == "cuda":
             self.dataset = datasets.load_dataset(self.params["tokenizer"]["name"])
