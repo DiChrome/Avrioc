@@ -2,6 +2,7 @@ data:
   dataset_name: amazon_polarity
   encoded_data_path: data/amazon_polarity_encoded
   raw_data_path: data/amazon_polarity_raw
+  data_percent: 10
   tokenizer:
     max_length: 128
     name: bert-base-uncased
@@ -14,7 +15,7 @@ model:
   - 64
   - 1
   dropout: 0.2
-  epoch: 2
+  epoch: 5
   index: 1
   optimizer_lr: 0.0001
   inference_model_path: output/model_1/

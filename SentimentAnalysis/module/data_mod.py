@@ -60,10 +60,16 @@ class SentimentDataModule:
             self.encode_dataset()
 
 # %%
-    def get_data_loader(self):
+    def get_data_loader(self, percent_data):
         print("get_data_loader()")
-        self.train_dataloader = DataLoader(self.encoded_dataset["train"], batch_size=self.params["arch_bit"], shuffle=True, num_workers=self.params["cpu_threads"]-2)
-        self.val_dataloader = DataLoader(self.encoded_dataset["test"], batch_size=self.params["arch_bit"] , shuffle=False, num_workers=self.params["cpu_threads"]-2)
+        train_count = int(self.len(self.encoded_dataset["train"])*percent_data/100)
+        test_count = int(self.len(self.encoded_dataset["test"])*percent_data/100)
+        self.train_dataloader = DataLoader(self.encoded_dataset["train"].select(range(train_count)),
+                                           batch_size=self.params["arch_bit"], shuffle=True,
+                                           num_workers=self.params["cpu_threads"]-2)
+        self.val_dataloader = DataLoader(self.encoded_dataset["test"].select(range(test_count)),
+                                         batch_size=self.params["arch_bit"] , shuffle=False,
+                                         num_workers=self.params["cpu_threads"]-2)
         return self.train_dataloader, self.val_dataloader
     
 

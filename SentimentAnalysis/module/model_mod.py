@@ -59,8 +59,8 @@ class TrainModel:
             self.model.eval()
             dataloader = self.val_dataloader
 
-        for batch_num, batch in enumerate(self.train_dataloader):
-            print(f"\r{batch_num=}", end="")
+        for batch_num, batch in enumerate(dataloader):
+            print(f"\rbatch_num={batch_num}/{len(dataloader)}", end="")
             if mode == "train":
                 self.optimizer.zero_grad()
             logit_tensor, label_tensor, loss = self.model_iteration(batch)
@@ -125,9 +125,11 @@ class TrainModel:
 
 # %%
 class InferModel:
-    def __init__(self, tokenizer_params, model):
+    def __init__(self, tokenizer_params, tokenizer, model):
         self.tokenizer_params = tokenizer_params
+        self.tokenizer = tokenizer
         self.model = model
+
     # %%
     def predict(self, text):
         # tokenizer_params["return_tensors"]
