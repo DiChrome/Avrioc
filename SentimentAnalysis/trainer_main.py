@@ -7,8 +7,8 @@ import pandas as pd
 import sys, os
 
 # %%
-%load_ext autoreload
-%autoreload 2
+# %load_ext autoreload
+# %autoreload 2
 utility_path = "../Utility"
 sys.path.append(utility_path)
 
