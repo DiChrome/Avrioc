@@ -131,8 +131,8 @@ class TrainModel:
                 # print(f"{loss=}, {batch_loss=}")
                 pred_tensor = (torch.sigmoid(logit_tensor) > 0.5).long()
                 correct_pred += (pred_tensor == label_tensor).sum().item()
-                if batch_num >= 10:  # To do: remove
-                    break
+                # if batch_num >= 10:  # To do: remove
+                #     break
                 
         total_pred += label_tensor.size(0)
         accuracy = correct_pred/total_pred
