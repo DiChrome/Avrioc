@@ -33,7 +33,7 @@ class SentimentDataModule:
 
     def encode_dataset(self):
         print("encode_dataset()")
-        tokenizer_params = self["tokenizer"]
+        tokenizer_params = self.params["tokenizer"]
         def tokenize_row(row):
             return self.tokenizer(row["content"], padding=tokenizer_params["padding"],
                                   max_length = tokenizer_params["max_length"],

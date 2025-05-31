@@ -9,16 +9,23 @@ import sys, os
 # %%
 # %load_ext autoreload
 # %autoreload 2
-utility_path = "../Utility"
-sys.path.append(utility_path)
 
-from Avrioc.SentimentAnalysis.module.data_mod import SentimentDataModule
-from Avrioc.SentimentAnalysis.module.model_mod import LstmClassifier, TrainModel
+# Module path (for module/ folder)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+module_path = os.path.join(current_dir, "module")
+sys.path.append(module_path)
+
+from data_mod import SentimentDataModule
+from model_mod import LstmClassifier, TrainModel
+
+utility_path = os.path.join(current_dir, "../Utility")
+sys.path.append(utility_path)
 from utility_mod import Util
 
 # %%
-yaml_path = "params.yaml"
-util_yaml_path = "../Utility/params.yaml"
+yaml_path = os.path.join(current_dir, "params.yaml")
+util_yaml_path = os.path.join(current_dir, "../Utility/params.yaml")
 
 util_params = Util.get_params(util_yaml_path)
 data_params = Util.get_params(yaml_path)["data"]
