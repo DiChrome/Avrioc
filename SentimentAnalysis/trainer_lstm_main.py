@@ -34,7 +34,7 @@ util_yaml_path = os.path.join(current_dir, "../Utility/params.yaml")
 # util_params = Util.get_params(util_yaml_path)
 data_params = Util.get_params(yaml_path)
 data_params.update(data_params["data"])
-model_params = Util.get_params(yaml_path)["model"]
+model_params = Util.get_params(yaml_path)
 model_params.update(data_params["model"])
 
 sdm = SentimentDataModule(data_params)
