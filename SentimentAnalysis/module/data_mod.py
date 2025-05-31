@@ -11,13 +11,13 @@ class SentimentDataModule:
 # %%
     def fetch_dataset(self):
         print("fetch_dataset()")
-        if self.params["device"] == "cpu":
+        if self.params["platform"] == "cpu":
             if os.path.isdir(self.params["raw_data_path"]):
                 self.dataset = datasets.load_from_disk(self.params["raw_data_path"])
             else:
                 self.dataset = datasets.load_dataset(self.params["tokenizer"]["name"])
                 self.dataset.save_to_disk(self.params["raw_data_path"])
-        elif self.params["device"] == "cuda":
+        elif self.params["platform"] == "cuda":
             self.dataset = datasets.load_dataset(self.params["tokenizer"]["name"])
 
         self.dataset = self.dataset.remove_columns("title")
@@ -49,7 +49,7 @@ class SentimentDataModule:
 # %%
     def load_encoded_dataset(self):
         print("load_encoded_dataset()")
-        if self.params["device"] == "cpu":
+        if self.params["platform"] == "cpu":
             if os.path.isdir(self.params["encoded_data_path"]):
                 self.encoded_dataset = datasets.load_from_disk(self.params["encoded_data_path"])
             else:

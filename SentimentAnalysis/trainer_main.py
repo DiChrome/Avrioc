@@ -34,7 +34,7 @@ model_params.update(util_params)
 sdm = SentimentDataModule(data_params)
 
 # %%
-is_platform_pc = sdm.params["device"] == "cuda"
+is_platform_pc = sdm.params["platform"] == "cuda"
 is_encoded_data_present = os.path.isdir(sdm.params["encoded_data_path"])
 
 if not is_platform_pc or not is_encoded_data_present:
