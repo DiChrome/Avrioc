@@ -1,0 +1,11 @@
+arch_bit: 64
+cpu_threads: 8
+dim_list:
+- 128
+- 64
+- 1
+dropout: 0.2
+epoch: 2
+index: 1
+optimizer_lr: 0.0001
+platform: pc

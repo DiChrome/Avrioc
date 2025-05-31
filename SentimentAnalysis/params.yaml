@@ -1,0 +1,18 @@
+data:
+  dataset_name: amazon_polarity
+  encoded_data_path: data/amazon_polarity_encoded
+  raw_data_path: data/amazon_polarity_raw
+  tokenizer:
+    max_length: 128
+    name: bert-base-uncased
+    padding: max_length
+    truncation: true
+model:
+  dim_list:
+  - 128
+  - 64
+  - 1
+  dropout: 0.2
+  epoch: 2
+  index: 1
+  optimizer_lr: 0.0001
