@@ -7,6 +7,7 @@ data:
     name: bert-base-uncased
     padding: max_length
     truncation: true
+    return_tensors: pt
 model:
   dim_list:
   - 128
@@ -16,3 +17,4 @@ model:
   epoch: 2
   index: 1
   optimizer_lr: 0.0001
+  inference_model_path: output/model_1/model.pt
