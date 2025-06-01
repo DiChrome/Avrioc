@@ -1,14 +1,14 @@
 data:
+  data_percent: 0.1
   dataset_name: amazon_polarity
   encoded_data_path: data/amazon_polarity_encoded
   raw_data_path: data/amazon_polarity_raw
-  data_percent: 5
   tokenizer:
     max_length: 128
     name: bert-base-uncased
     padding: max_length
-    truncation: true
     return_tensors: pt
+    truncation: true
 model:
   dim_list:
   - 128
@@ -16,6 +16,5 @@ model:
   - 1
   dropout: 0.2
   epoch: 3
-  index: 1
+  index: 2
   optimizer_lr: 0.0001
-  inference_model_path: output/model_1/

@@ -2,6 +2,7 @@
 import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
+from transformers import BertModel
 
 class LstmClassifier(nn.Module):
     def __init__(self, vocab_size, dim_list, dropout):
@@ -17,13 +18,31 @@ class LstmClassifier(nn.Module):
         self.dropout = nn.Dropout(dropout)
         self.linear = nn.Linear(dim_list[1], dim_list[2])
 
-    def forward(self, input_id_tensor):
+    def forward(self, input_id_tensor, attention_mask_tensor = None):
         logit = self.embedding(input_id_tensor)#[BatchTokenEmbedding]
         output, (hn, cn) = self.lstm(logit)#hn=[LayerBatchHidden]
         h = hn[-1]#[BatchHidden]
         logit = self.dropout(h)
         logit = self.linear(logit)#[BatchHidden]
         return logit
+    
+
+class TransformerClassifier(nn.Module):
+    def __init__(self, dropout):
+        super().__init__()
+
+        self.encoder = BertModel.from_pretrained("bert-base-uncased")
+        self.dropout = nn.Dropout(dropout)
+        self.linear = nn.Linear(self.encoder.config.hidden_size, 1)
+
+    def forward(self, input_id_tensor, attention_mask_tensor):
+        output = self.encoder(input_ids=input_id_tensor, attention_mask=attention_mask_tensor)
+        pooled_h = output.pooler_output
+        logit = self.dropout(pooled_h)
+        logit = self.linear(logit)
+        return logit
+
+
 
 # %%
 class TrainModel:
@@ -39,8 +58,9 @@ class TrainModel:
     def model_iteration(self, batch):
         input_id_tensor = batch["input_ids"].to(self.params["device"])
         label_tensor = batch["label"].to(self.params["device"])
+        attention_mask_tensor = batch["attention_mask"].to(self.params["device"])
 
-        logit_tensor = self.model(input_id_tensor)#[BatchHidden]
+        logit_tensor = self.model(input_id_tensor, attention_mask_tensor)#[BatchHidden]
         logit_tensor = logit_tensor.view(-1)#[Batch]
         loss = self.loss_func(logit_tensor.float(), label_tensor.float())
         return logit_tensor, label_tensor, loss
@@ -60,7 +80,7 @@ class TrainModel:
             dataloader = self.val_dataloader
 
         for batch_num, batch in enumerate(dataloader):
-            print(f"\rbatch_num={batch_num}/{len(dataloader)}", end="")
+            print(f"\rbatch_num={batch_num}/{len(dataloader)-1}", end="")
             if mode == "train":
                 self.optimizer.zero_grad()
             logit_tensor, label_tensor, loss = self.model_iteration(batch)
@@ -92,7 +112,7 @@ class TrainModel:
         for epoch in range(1, self.params["epoch"]+1):
             train_loss, train_accuracy = self.model_epoch("train")
             val_loss, val_accuracy = self.model_epoch("val")
-            print(f"\nepoch={epoch}/{self.params['epoch']}|{train_loss=}|{val_loss=}")
+            print(f"epoch={epoch}/{self.params['epoch']}|{train_loss=}|{val_loss=}")
             print(f"{train_accuracy=}|{val_accuracy=}")
             output_list.append({"epoch":epoch, "train_loss": train_loss, "val_loss": val_loss,
                                 "train_accuracy": train_accuracy, "val_accuracy": val_accuracy})
@@ -133,12 +153,16 @@ class InferModel:
     # %%
     def predict(self, text):
         # tokenizer_params["return_tensors"]
-        token_id = self.tokenizer.encode(text, padding=self.tokenizer_params["padding"],
+        encoded_tensor = self.tokenizer(text, padding=self.tokenizer_params["padding"],
                                     max_length = self.tokenizer_params["max_length"],
-                                    truncation=self.tokenizer_params["truncation"])
-        input_tensor = torch.tensor(token_id).unsqueeze(0)
+                                    truncation=self.tokenizer_params["truncation"],
+                                    return_tensors="pt")
+        input_tensor = encoded_tensor["input_ids"]
+        attention_mask_tensor = encoded_tensor["attention_mask"]
+
+
         with torch.no_grad():
-            logit_tensor = self.model(input_tensor).view(-1)
+            logit_tensor = self.model(input_tensor, attention_mask_tensor).view(-1)
         
         pred_tensor = (torch.sigmoid(logit_tensor) > 0.5).int()
         pred = pred_tensor.item()
