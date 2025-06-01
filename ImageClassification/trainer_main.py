@@ -52,6 +52,7 @@ len(val_dataloader)
 # %%
 # train_dataloader, val_dataloader = sdm.get_data_loader(percent_data = data_params["data_percent"])
 model = Resnet18Classifier(model_params["dim_list"], model_params["dropout"], model_params["num_groups"])
+model.to(model_params["device"])
 loss_func = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=model_params["optimizer_lr"])
 
