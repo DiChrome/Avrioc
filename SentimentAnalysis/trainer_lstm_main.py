@@ -70,7 +70,7 @@ plt = train_model.plot_metrics(metrics_df)
 Util.increment_model_index(yaml_path)
 metrics_df = pd.DataFrame(output)
 model_params["index"]+=1
-output_path = f"{current_dir}output/model_{model_params['index']}"
+output_path = f"{current_dir}/output/model_{model_params['index']}"
 
 os.mkdir(output_path)
 torch.save(model.state_dict(), f"{output_path}/model.pt")
