@@ -2,7 +2,7 @@
 import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
-from transformers import BertModel
+# from transformers import BertModel
 import torchvision as torchv
 
 # %%
@@ -49,20 +49,20 @@ class LstmClassifier(nn.Module):
         return logit
     
 # %%
-class TransformerClassifier(nn.Module):
-    def __init__(self, dropout):
-        super().__init__()
+# class TransformerClassifier(nn.Module):
+#     def __init__(self, dropout):
+#         super().__init__()
 
-        self.encoder = BertModel.from_pretrained("bert-base-uncased")
-        self.dropout = nn.Dropout(dropout)
-        self.linear = nn.Linear(self.encoder.config.hidden_size, 1)
+#         self.encoder = BertModel.from_pretrained("bert-base-uncased")
+#         self.dropout = nn.Dropout(dropout)
+#         self.linear = nn.Linear(self.encoder.config.hidden_size, 1)
 
-    def forward(self, input_id_tensor, attention_mask_tensor):
-        output = self.encoder(input_ids=input_id_tensor, attention_mask=attention_mask_tensor)
-        pooled_h = output.pooler_output
-        logit = self.dropout(pooled_h)
-        logit = self.linear(logit)
-        return logit
+#     def forward(self, input_id_tensor, attention_mask_tensor):
+#         output = self.encoder(input_ids=input_id_tensor, attention_mask=attention_mask_tensor)
+#         pooled_h = output.pooler_output
+#         logit = self.dropout(pooled_h)
+#         logit = self.linear(logit)
+#         return logit
 
 
 
