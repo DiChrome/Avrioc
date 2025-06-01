@@ -13,17 +13,11 @@ class Resnet18Classifier(nn.Module):
             return nn.GroupNorm(num_groups=num_groups, num_channels=num_channels)
 
         self.resnet = torchv.models.resnet18(pretrained=False, norm_layer=group_normal_layer)#[ChannelHeightLength]
-        self.resnet.fc = nn.Sequential(
-    nn.Dropout(dropout),
-    nn.Linear(dim_list[0], dim_list[1])
-)
-        # self.dropout = nn.Dropout(dropout)
-        # self.linear = nn.Linear(dim_list[0], dim_list[1])
+        self.resnet.fc = nn.Sequential(nn.Dropout(dropout),
+                                       nn.Linear(dim_list[0], dim_list[1]))#[BatchHidden]
 
     def forward(self, img_tensor):
-        logit = self.resnet(img_tensor)#[BatchChannelHeightLength]
-        # logit = self.dropout(logit)
-        # logit = self.linear(logit)#[BatchHidden]
+        logit = self.resnet(img_tensor)
         return logit
 # %%
 class LstmClassifier(nn.Module):
@@ -109,15 +103,10 @@ class TrainModel:
             
             total_loss+=batch_loss.item()
             total_pred += label_tensor.size(0)
-            print(f"{total_loss=}")
-            print(f"{total_pred=}")
             prob_tensor = torch.softmax(logit_tensor, dim=1)
             pred_tensor = prob_tensor.argmax(dim=1)
             
-            print(f"{pred_tensor=}")
-            print(f"{label_tensor=}")
             correct_pred += (pred_tensor == label_tensor).sum().item()
-            print(f"{correct_pred=}")
             
             if mode == "train":
                 batch_loss.backward()
@@ -125,7 +114,6 @@ class TrainModel:
             
         loss = total_loss/len(dataloader)
         accuracy = correct_pred/total_pred
-        print(f"{accuracy=}")
 
         print("")        
         return loss, accuracy
