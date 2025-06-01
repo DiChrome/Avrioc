@@ -92,13 +92,11 @@ class TrainModel:
             # print(f"{loss=}|{loss.shape=}")
             
             if mode == "train":
-                self.optimizer.zero_grad()
                 loss.backward()
                 self.optimizer.step()
             # if batch_num >= 10:  # To do: remove
             #     break
             
-        total_pred += label_tensor.size(0)
         loss = total_loss/len(dataloader)
         accuracy = correct_pred/total_pred
 

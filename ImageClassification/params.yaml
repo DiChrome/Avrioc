@@ -1,0 +1,21 @@
+data:
+  data_percent: 100
+  raw_test_data_path: data/test
+  raw_train_data_path: data/train
+  transform:
+    grayscale: 3
+    normalize:
+      mu: 0.5
+      sigma: 0.5
+    resize:
+    - 244
+    - 244
+model:
+  dim_list:
+  - 512
+  - 10
+  dropout: 0.3
+  epoch: 100
+  index: 7
+  num_groups: 32
+  optimizer_lr: 1.0e-05
