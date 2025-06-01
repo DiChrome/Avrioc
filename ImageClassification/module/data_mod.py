@@ -22,6 +22,7 @@ class ImageDataModule:
     def fetch_dataset(self):
         print("fetch_dataset()")
         download = os.path.isdir(self.data_path)
+        print(f"{download=}")
         
         self.train_dataset = torchv.datasets.MNIST(self.data_path+"/train", train = True, download = download, transform=self.input_transform)
         self.test_dataset = torchv.datasets.MNIST(self.data_path+"/test", train = False, download = download, transform=self.input_transform)
