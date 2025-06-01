@@ -16,5 +16,5 @@ model:
   - 1
   dropout: 0.2
   epoch: 3
-  index: 2
+  index: 3
   optimizer_lr: 0.0001

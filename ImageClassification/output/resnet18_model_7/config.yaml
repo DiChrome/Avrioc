@@ -1,0 +1,32 @@
+arch_bit: 64
+cpu_threads: 8
+data:
+  data_percent: 5
+  raw_test_data_path: data/test
+  raw_train_data_path: data/train
+  transform:
+    grayscale: 3
+    normalize:
+      mu: 0.5
+      sigma: 0.5
+    resize:
+    - 244
+    - 244
+dim_list:
+- 512
+- 10
+dropout: 0.2
+epoch: 7
+index: 7
+model:
+  dim_list:
+  - 512
+  - 10
+  dropout: 0.2
+  epoch: 7
+  index: 6
+  num_groups: 32
+  optimizer_lr: 1.0e-05
+num_groups: 32
+optimizer_lr: 1.0e-05
+platform: cpu
