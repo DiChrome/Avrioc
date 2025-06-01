@@ -15,7 +15,7 @@ model:
   - 512
   - 10
   dropout: 0.3
-  epoch: 100
+  epoch: 12
   index: 7
   num_groups: 32
   optimizer_lr: 1.0e-05
